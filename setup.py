@@ -26,12 +26,12 @@ def main():
 
 
 def push_eda_kernel(path, user):
-    metadata = {"id": user + "/jane-street-eda",
-                "title": "Jane Street - EDA",
+    metadata = {"id": user + "/jane-street-market-prediction-eda",
+                "title": "Jane Street Market Prediction - EDA",
                 "code_file": "eda.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
-                "enable_internet": "false",
+                "enable_internet": "true",
                 "competition_sources": ["jane-street-market-prediction"]}
     
     push_kernel(path, metadata)
