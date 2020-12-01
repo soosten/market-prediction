@@ -12,16 +12,24 @@ def main():
     # path to the repository from working directory
     path = os.curdir
 
-    # choose an operation
-    # push_generation_kernel(path, user)
-    # wait_for_kernel(user, "game-of-life-data-generation")
-    # generation_kernel_to_dataset(user)
-    # push_training_kernel(path, user)
-    # wait_for_kernel(user, "game-of-life-training")
-    # push_inference_kernel(path, user)
-    # push_gpu_kernel(path, user)
-    push_eda_kernel(path, user)
+    # choose an operation    
+    # push_eda_kernel(path, user)
+    # push_single_kernel(path, user)
 
+    return
+
+
+def push_single_kernel(path, user):
+    metadata = {"id": user + "/jane-street-single-time-predictions",
+                "title": "Jane Street Single-Time Predictions",
+                "code_file": "single-time.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_gpu": "true",
+                "enable_internet": "true",
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
     return
 
 
@@ -37,6 +45,33 @@ def push_eda_kernel(path, user):
     push_kernel(path, metadata)
     return
 
+
+
+def push_submission_kernel(path, user):
+    metadata = {"id": user + "/jane-street-market-prediction-submission",
+                "title": "Jane Street Market Prediction - Submission",
+                "code_file": "submission.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "false",
+                # "enable_gpu": "true",
+                # "kernel_sources": [user + "/model-kernel"]}
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
+    return
+
+
+
+# push_generation_kernel(path, user)
+# wait_for_kernel(user, "game-of-life-data-generation")
+# generation_kernel_to_dataset(user)
+# push_training_kernel(path, user)
+# wait_for_kernel(user, "game-of-life-training")
+# push_inference_kernel(path, user)
+# push_gpu_kernel(path, user)
+    
+    
 
 def push_gpu_kernel(path, user):
     metadata = {"id": user + "/game-of-life-gpu",
