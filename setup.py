@@ -15,7 +15,25 @@ def main():
     # choose an operation    
     # push_eda_kernel(path, user)
     # push_single_kernel(path, user)
+    push_bagging_kernel(path, user)
+    # push_conversion_kernel(path, user)
+    # wait_for_kernel(user, "jane-street-market-prediction-data-conversion")
+    # kernel_to_dataset(user)
+    # push_tpu_kernel(path, user)
 
+    return
+
+
+def push_bagging_kernel(path, user):
+    metadata = {"id": user + "/jane-street-bagging-experiments",
+                "title": "Jane Street Bagging Experiments",
+                "code_file": "bagging.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "true",
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
     return
 
 
@@ -62,93 +80,46 @@ def push_submission_kernel(path, user):
     return
 
 
-
-# push_generation_kernel(path, user)
-# wait_for_kernel(user, "game-of-life-data-generation")
-# generation_kernel_to_dataset(user)
-# push_training_kernel(path, user)
-# wait_for_kernel(user, "game-of-life-training")
-# push_inference_kernel(path, user)
-# push_gpu_kernel(path, user)
+def push_conversion_kernel(path, user):
+    metadata = {"id": user + "/jane-street-market-prediction-data-conversion",
+                "title": "Jane Street Market Prediction - Data Conversion",
+                "code_file": "conversion.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "competition_sources": ["jane-street-market-prediction"]}
     
-    
+    push_kernel(path, metadata)
+    return
 
-def push_gpu_kernel(path, user):
-    metadata = {"id": user + "/game-of-life-gpu",
-                "title": "Game of Life - GPU",
-                "code_file": "gpu.ipynb",
+
+def push_tpu_kernel(path, user):
+    metadata = {"id": user + "/jane-street-market-prediction-tpu",
+                "title": "Jane Street Market Prediction - TPU",
+                "code_file": "tpu.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "true",
-                "enable_gpu": "true"}
+                "dataset_sources": [user + "/jane-street-market-prediction-data"]}
     
     push_kernel(path, metadata)
     return
 
 
-def push_deuce(path, user):
-    metadata = {"id": user + "/game-of-life-2",
-                "title": "Game of Life - 2",
-                "code_file": "2level.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_internet": "true",
-                "enable_gpu": "true"}
-    
-    push_kernel(path, metadata)
-    return
-
-
-def push_generation_kernel(path, user):
-    metadata = {"id": user + "/game-of-life-data-generation",
-                "title": "Game of Life - Data Generation",
-                "code_file": "generation.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_gpu": "true"}
-    
-    push_kernel(path, metadata)
-    return
-
-
-def push_training_kernel(path, user):
-    metadata = {"id": user + "/game-of-life-training",
-                "title": "Game of Life - Training",
-                "code_file": "training.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_internet": "true",
-                "dataset_sources": [user + "/game-of-life-data"]}
-    
-    push_kernel(path, metadata)
-    return
-
-
-def push_inference_kernel(path, user):
-    metadata = {"id": user + "/game-of-life-inference",
-                "title": "Game of Life - Inference",
-                "code_file": "inference.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_gpu": "true",
-                "competition_sources": ["conways-reverse-game-of-life-2020"],
-                "kernel_sources": [user + "/game-of-life-training"]}
-    
-    push_kernel(path, metadata)
-    return
-
-
-def generation_kernel_to_dataset(user):
-    metadata = {"id": user + "/game-of-life-data",
-                "title": "Game of Life - Data",
+def kernel_to_dataset(user):
+    metadata = {"id": user + "/jane-street-market-prediction-data",
+                "title": "Jane Street Market Prediction - Data",
                 "licenses": [{"name": "CC-BY-SA-4.0"}]}
+    
+    kernel = "jane-street-market-prediction-data-conversion"
 
     with tempfile.TemporaryDirectory() as tempdir:
-        generation = user + "/game-of-life-data-generation"
+        # retrive the kernel output
+        generation = user + "/" + kernel
         cmd = "kaggle kernels output " + generation + " -p " + tempdir
         subprocess.run(cmd.split())
         
-        os.remove(os.path.join(tempdir, "game-of-life-data-generation.log"))
+        # remove the log file
+        os.remove(os.path.join(tempdir, kernel + ".log"))
         
         # write the metadata into appropriate json file
         metafile = os.path.join(tempdir, "dataset-metadata.json")
