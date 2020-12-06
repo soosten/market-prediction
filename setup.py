@@ -16,9 +16,7 @@ def main():
     # push_eda_kernel(path, user)
     # push_single_kernel(path, user)
     push_bagging_kernel(path, user)
-    # push_conversion_kernel(path, user)
-    # wait_for_kernel(user, "jane-street-market-prediction-data-conversion")
-    # kernel_to_dataset(user)
+    # make_tpu_data(path, user)
     # push_tpu_kernel(path, user)
 
     return
@@ -80,18 +78,6 @@ def push_submission_kernel(path, user):
     return
 
 
-def push_conversion_kernel(path, user):
-    metadata = {"id": user + "/jane-street-market-prediction-data-conversion",
-                "title": "Jane Street Market Prediction - Data Conversion",
-                "code_file": "conversion.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "competition_sources": ["jane-street-market-prediction"]}
-    
-    push_kernel(path, metadata)
-    return
-
-
 def push_tpu_kernel(path, user):
     metadata = {"id": user + "/jane-street-market-prediction-tpu",
                 "title": "Jane Street Market Prediction - TPU",
@@ -105,13 +91,30 @@ def push_tpu_kernel(path, user):
     return
 
 
-def kernel_to_dataset(user):
+def make_tpu_data(path, user):
+    kernel = "jane-street-market-prediction-data-conversion"
+    
+    metadata = {"id": user + "/" + kernel,
+                "title": "Jane Street Market Prediction - Data Conversion",
+                "code_file": "conversion.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
+    
+    wait_for_kernel(user, kernel)
+    
     metadata = {"id": user + "/jane-street-market-prediction-data",
                 "title": "Jane Street Market Prediction - Data",
                 "licenses": [{"name": "CC-BY-SA-4.0"}]}
     
-    kernel = "jane-street-market-prediction-data-conversion"
+    kernel_to_dataset(user, kernel, metadata)
+    
+    return
+    
 
+def kernel_to_dataset(user, kernel, metadata):
     with tempfile.TemporaryDirectory() as tempdir:
         # retrive the kernel output
         generation = user + "/" + kernel
@@ -136,7 +139,9 @@ def kernel_to_dataset(user):
 def wait_for_kernel(user, slug, interval=300):
     cmd = "kaggle kernels status " + user + "/" + slug
     output = ""
-
+    
+    # while the status of the kernel is not complete,
+    # wait and then check the status of the kernel
     while '"complete"' not in output:
         print(f"Waiting for {interval} seconds...")
         time.sleep(interval)
