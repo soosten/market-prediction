@@ -15,9 +15,9 @@ def main():
     # choose an operation    
     # push_eda_kernel(path, user)
     # push_single_kernel(path, user)
-    push_bagging_kernel(path, user)
+    # push_bagging_kernel(path, user)
     # make_tpu_data(path, user)
-    # push_tpu_kernel(path, user)
+    push_tpu_kernel(path, user)
 
     return
 
