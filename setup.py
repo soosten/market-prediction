@@ -14,13 +14,29 @@ def main():
 
     # choose an operation    
     # push_eda_kernel(path, user)
-    # push_single_kernel(path, user)
+    # push_naive_kernel(path, user)
     # push_bagging_kernel(path, user)
     # make_tpu_data(path, user)
-    push_tpu_kernel(path, user)
+    # push_tpudebug_kernel(path, user)
+    # push_tpu_kernel(path, user)
+    push_gpu_kernel(path, user)
+
+    # push_baseline_kernel(path, user)
 
     return
 
+
+def push_tpudebug_kernel(path, user):
+    metadata = {"id": user + "/jane-street-market-prediction-debug",
+                "title": "Jane Street Market Prediction - Debug",
+                "code_file": "tpudebug.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "true",
+                "dataset_sources": [user + "/jane-street-market-prediction-data"]}
+    
+    push_kernel(path, metadata)
+    return
 
 def push_bagging_kernel(path, user):
     metadata = {"id": user + "/jane-street-bagging-experiments",
@@ -35,10 +51,37 @@ def push_bagging_kernel(path, user):
     return
 
 
-def push_single_kernel(path, user):
+def push_gpu_kernel(path, user):
+    metadata = {"id": user + "/jane-street-gpu",
+                "title": "Jane Street - GPU",
+                "code_file": "gpu.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_gpu": "true",
+                "enable_internet": "false",
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
+    return
+
+
+def push_baseline_kernel(path, user):
+    metadata = {"id": user + "/jane-street-baseline",
+                "title": "Jane Street - Baseline",
+                "code_file": "baseline.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_gpu": "true",
+                "enable_internet": "false",
+                "competition_sources": ["jane-street-market-prediction"]}
+    
+    push_kernel(path, metadata)
+    return
+
+def push_naive_kernel(path, user):
     metadata = {"id": user + "/jane-street-single-time-predictions",
                 "title": "Jane Street Single-Time Predictions",
-                "code_file": "single-time.ipynb",
+                "code_file": "naive.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_gpu": "true",
