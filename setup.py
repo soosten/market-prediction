@@ -18,8 +18,8 @@ def main():
     # push_bagging_kernel(path, user)
     # make_tpu_data(path, user)
     # push_tpudebug_kernel(path, user)
-    # push_tpu_kernel(path, user)
-    push_gpu_kernel(path, user)
+    push_tpu_kernel(path, user)
+    # push_gpu_kernel(path, user)
 
     # push_baseline_kernel(path, user)
 
