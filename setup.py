@@ -18,11 +18,27 @@ def main():
     # push_bagging_kernel(path, user)
     # make_tpu_data(path, user)
     # push_tpudebug_kernel(path, user)
-    push_tpu_kernel(path, user)
+    # push_tpu_kernel(path, user)
     # push_gpu_kernel(path, user)
+    push_utility_kernel(path, user)
 
     # push_baseline_kernel(path, user)
 
+    return
+
+
+def push_utility_kernel(path, user):
+    metadata = {"id": user + "/jane-street-utility",
+                "title": "Jane Street - Utility",
+                "code_file": "utility.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "false",
+                "competition_sources": ["jane-street-market-prediction"],
+                "dataset_sources": [user + "/jane-street-market-prediction-data"],
+                "kernel_sources": [user + "/jane-street-market-prediction-tpu"]}
+    
+    push_kernel(path, metadata)
     return
 
 
