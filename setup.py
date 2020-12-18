@@ -7,20 +7,21 @@ import time
 
 def main():
     # kaggle username
-    user = "soosten"   
-    
+    user = "soosten"
+
     # path to the repository from working directory
     path = os.curdir
 
-    # choose an operation    
+    # choose an operation
     # push_eda_kernel(path, user)
     # push_naive_kernel(path, user)
     # push_bagging_kernel(path, user)
     # make_tpu_data(path, user)
     # push_tpudebug_kernel(path, user)
     # push_tpu_kernel(path, user)
+    push_submission_kernel(path, user)
     # push_gpu_kernel(path, user)
-    push_utility_kernel(path, user)
+    # push_utility_kernel(path, user)
 
     # push_baseline_kernel(path, user)
 
@@ -37,7 +38,7 @@ def push_utility_kernel(path, user):
                 "competition_sources": ["jane-street-market-prediction"],
                 "dataset_sources": [user + "/jane-street-market-prediction-data"],
                 "kernel_sources": [user + "/jane-street-market-prediction-tpu"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -49,10 +50,12 @@ def push_tpudebug_kernel(path, user):
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "true",
+                "competition_sources": ["jane-street-market-prediction"],
                 "dataset_sources": [user + "/jane-street-market-prediction-data"]}
-    
+
     push_kernel(path, metadata)
     return
+
 
 def push_bagging_kernel(path, user):
     metadata = {"id": user + "/jane-street-bagging-experiments",
@@ -62,7 +65,7 @@ def push_bagging_kernel(path, user):
                 "kernel_type": "notebook",
                 "enable_internet": "true",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -76,7 +79,7 @@ def push_gpu_kernel(path, user):
                 "enable_gpu": "true",
                 "enable_internet": "false",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -90,9 +93,10 @@ def push_baseline_kernel(path, user):
                 "enable_gpu": "true",
                 "enable_internet": "false",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
+
 
 def push_naive_kernel(path, user):
     metadata = {"id": user + "/jane-street-single-time-predictions",
@@ -103,7 +107,7 @@ def push_naive_kernel(path, user):
                 "enable_gpu": "true",
                 "enable_internet": "true",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -116,7 +120,7 @@ def push_eda_kernel(path, user):
                 "kernel_type": "notebook",
                 "enable_internet": "true",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -129,10 +133,10 @@ def push_submission_kernel(path, user):
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "false",
-                # "enable_gpu": "true",
-                # "kernel_sources": [user + "/model-kernel"]}
+                "enable_gpu": "true",
+                "kernel_sources": [user + "/jane-street-market-prediction-tpu"],
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
     return
 
@@ -145,33 +149,33 @@ def push_tpu_kernel(path, user):
                 "kernel_type": "notebook",
                 "enable_internet": "true",
                 "dataset_sources": [user + "/jane-street-market-prediction-data"]}
-    
+
     push_kernel(path, metadata)
     return
 
 
 def make_tpu_data(path, user):
     kernel = "jane-street-market-prediction-data-conversion"
-    
+
     metadata = {"id": user + "/" + kernel,
                 "title": "Jane Street Market Prediction - Data Conversion",
                 "code_file": "conversion.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "competition_sources": ["jane-street-market-prediction"]}
-    
+
     push_kernel(path, metadata)
-    
+
     wait_for_kernel(user, kernel)
-    
+
     metadata = {"id": user + "/jane-street-market-prediction-data",
                 "title": "Jane Street Market Prediction - Data",
                 "licenses": [{"name": "CC-BY-SA-4.0"}]}
-    
+
     kernel_to_dataset(user, kernel, metadata)
-    
+
     return
-    
+
 
 def kernel_to_dataset(user, kernel, metadata):
     with tempfile.TemporaryDirectory() as tempdir:
@@ -179,15 +183,15 @@ def kernel_to_dataset(user, kernel, metadata):
         generation = user + "/" + kernel
         cmd = "kaggle kernels output " + generation + " -p " + tempdir
         subprocess.run(cmd.split())
-        
+
         # remove the log file
         os.remove(os.path.join(tempdir, kernel + ".log"))
-        
+
         # write the metadata into appropriate json file
         metafile = os.path.join(tempdir, "dataset-metadata.json")
         with open(metafile, "w") as file:
             json.dump(metadata, file)
-    
+
         # create dataset using the kaggle command line tool
         cmd = "kaggle datasets create -p " + tempdir
         subprocess.run(cmd.split())
@@ -198,7 +202,7 @@ def kernel_to_dataset(user, kernel, metadata):
 def wait_for_kernel(user, slug, interval=300):
     cmd = "kaggle kernels status " + user + "/" + slug
     output = ""
-    
+
     # while the status of the kernel is not complete,
     # wait and then check the status of the kernel
     while '"complete"' not in output:
@@ -206,7 +210,7 @@ def wait_for_kernel(user, slug, interval=300):
         time.sleep(interval)
         output = subprocess.check_output(cmd.split()).decode()
         print(output, end="")
-    
+
     return
 
 
