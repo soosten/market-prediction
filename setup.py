@@ -14,17 +14,46 @@ def main():
 
     # choose an operation
     # push_eda_kernel(path, user)
-    # push_naive_kernel(path, user)
-    # push_bagging_kernel(path, user)
-    # make_tpu_data(path, user)
-    # push_tpudebug_kernel(path, user)
+    # push_data(path, user)
     # push_tpu_kernel(path, user)
-    push_submission_kernel(path, user)
-    # push_gpu_kernel(path, user)
     # push_utility_kernel(path, user)
+    push_submission_kernel(path, user)
 
-    # push_baseline_kernel(path, user)
+    return
 
+
+def push_data(path, user):
+    kernel = "jane-street-conversion"
+
+    metadata = {"id": user + "/" + kernel,
+                "title": "Jane Street - Conversion",
+                "code_file": "conversion.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "competition_sources": ["jane-street-market-prediction"]}
+
+    push_kernel(path, metadata)
+
+    wait_for_kernel(user, kernel)
+
+    metadata = {"id": user + "/jane-street-data",
+                "title": "Jane Street - Data",
+                "licenses": [{"name": "CC-BY-SA-4.0"}]}
+
+    kernel_to_dataset(user, kernel, metadata)
+    return
+
+
+def push_tpu_kernel(path, user):
+    metadata = {"id": user + "/jane-street-tpu",
+                "title": "Jane Street - TPU",
+                "code_file": "tpu.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "true",
+                "dataset_sources": [user + "/jane-street-data"]}
+
+    push_kernel(path, metadata)
     return
 
 
@@ -35,77 +64,24 @@ def push_utility_kernel(path, user):
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "false",
-                "competition_sources": ["jane-street-market-prediction"],
-                "dataset_sources": [user + "/jane-street-market-prediction-data"],
-                "kernel_sources": [user + "/jane-street-market-prediction-tpu"]}
+                "dataset_sources": [user + "/jane-street-data"],
+                "kernel_sources": [user + "/jane-street-tpu"]}
 
     push_kernel(path, metadata)
     return
 
 
-def push_tpudebug_kernel(path, user):
-    metadata = {"id": user + "/jane-street-market-prediction-debug",
-                "title": "Jane Street Market Prediction - Debug",
-                "code_file": "tpudebug.ipynb",
+def push_submission_kernel(path, user):
+    metadata = {"id": user + "/jane-street-submission",
+                "title": "Jane Street - Submission",
+                "code_file": "submission.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
-                "enable_internet": "true",
-                "competition_sources": ["jane-street-market-prediction"],
-                "dataset_sources": [user + "/jane-street-market-prediction-data"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def push_bagging_kernel(path, user):
-    metadata = {"id": user + "/jane-street-bagging-experiments",
-                "title": "Jane Street Bagging Experiments",
-                "code_file": "bagging.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_internet": "true",
-                "competition_sources": ["jane-street-market-prediction"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def push_gpu_kernel(path, user):
-    metadata = {"id": user + "/jane-street-gpu",
-                "title": "Jane Street - GPU",
-                "code_file": "gpu.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_gpu": "true",
                 "enable_internet": "false",
-                "competition_sources": ["jane-street-market-prediction"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def push_baseline_kernel(path, user):
-    metadata = {"id": user + "/jane-street-baseline",
-                "title": "Jane Street - Baseline",
-                "code_file": "baseline.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
                 "enable_gpu": "true",
-                "enable_internet": "false",
-                "competition_sources": ["jane-street-market-prediction"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def push_naive_kernel(path, user):
-    metadata = {"id": user + "/jane-street-single-time-predictions",
-                "title": "Jane Street Single-Time Predictions",
-                "code_file": "naive.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_gpu": "true",
-                "enable_internet": "true",
+                "kernel_sources": [user + "/jane-street-tpu",
+                                   user + "/jane-street-utility"],
+                "dataset_sources": [user + "/jane-street-data"],
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
@@ -113,8 +89,8 @@ def push_naive_kernel(path, user):
 
 
 def push_eda_kernel(path, user):
-    metadata = {"id": user + "/jane-street-market-prediction-eda",
-                "title": "Jane Street Market Prediction - EDA",
+    metadata = {"id": user + "/jane-street-eda",
+                "title": "Jane Street - EDA",
                 "code_file": "eda.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
@@ -122,58 +98,6 @@ def push_eda_kernel(path, user):
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
-    return
-
-
-
-def push_submission_kernel(path, user):
-    metadata = {"id": user + "/jane-street-market-prediction-submission",
-                "title": "Jane Street Market Prediction - Submission",
-                "code_file": "submission.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_internet": "false",
-                "enable_gpu": "true",
-                "kernel_sources": [user + "/jane-street-market-prediction-tpu"],
-                "competition_sources": ["jane-street-market-prediction"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def push_tpu_kernel(path, user):
-    metadata = {"id": user + "/jane-street-market-prediction-tpu",
-                "title": "Jane Street Market Prediction - TPU",
-                "code_file": "tpu.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "enable_internet": "true",
-                "dataset_sources": [user + "/jane-street-market-prediction-data"]}
-
-    push_kernel(path, metadata)
-    return
-
-
-def make_tpu_data(path, user):
-    kernel = "jane-street-market-prediction-data-conversion"
-
-    metadata = {"id": user + "/" + kernel,
-                "title": "Jane Street Market Prediction - Data Conversion",
-                "code_file": "conversion.ipynb",
-                "language": "python",
-                "kernel_type": "notebook",
-                "competition_sources": ["jane-street-market-prediction"]}
-
-    push_kernel(path, metadata)
-
-    wait_for_kernel(user, kernel)
-
-    metadata = {"id": user + "/jane-street-market-prediction-data",
-                "title": "Jane Street Market Prediction - Data",
-                "licenses": [{"name": "CC-BY-SA-4.0"}]}
-
-    kernel_to_dataset(user, kernel, metadata)
-
     return
 
 
