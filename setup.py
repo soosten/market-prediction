@@ -13,11 +13,11 @@ def main():
     path = os.curdir
 
     # choose an operation
-    # push_eda_kernel(path, user)
+    push_eda_kernel(path, user)
     # push_data(path, user)
     # push_tpu_kernel(path, user)
     # push_utility_kernel(path, user)
-    push_submission_kernel(path, user)
+    # push_submission_kernel(path, user)
 
     return
 
