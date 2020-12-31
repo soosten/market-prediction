@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import time
 
 
 def main():
@@ -12,8 +13,11 @@ def main():
 
     # choose an operation
     # push_gpu_kernel(path, user)
-    # push_gpuutility_kernel(path, user)
+    wait_for_kernel(user, "jane-street-gpu")
+    push_gpuutility_kernel(path, user)
+    wait_for_kernel(user, "jane-street-gpu-utility")
     push_gpusubmission_kernel(path, user)
+    wait_for_kernel(user, "jane-street-gpu-submission")
 
     return
 
@@ -58,6 +62,21 @@ def push_gpusubmission_kernel(path, user):
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
+    return
+
+
+def wait_for_kernel(user, slug, interval=300):
+    cmd = "kaggle kernels status " + user + "/" + slug
+    output = ""
+
+    # while the status of the kernel is not complete,
+    # wait and then check the status of the kernel
+    while '"complete"' not in output:
+        print(f"Waiting for {interval} seconds...")
+        time.sleep(interval)
+        output = subprocess.check_output(cmd.split()).decode()
+        print(output, end="")
+
     return
 
 
