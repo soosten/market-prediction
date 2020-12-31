@@ -12,7 +12,7 @@ def main():
     path = os.curdir
 
     # choose an operation
-    # push_gpu_kernel(path, user)
+    push_gpu_kernel(path, user)
     wait_for_kernel(user, "jane-street-gpu")
     push_gpuutility_kernel(path, user)
     wait_for_kernel(user, "jane-street-gpu-utility")
