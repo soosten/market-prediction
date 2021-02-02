@@ -11,15 +11,29 @@ def main():
     path = os.curdir
 
     # choose an operation
+    # push_mi_kernel(path, user)
     push_eda_kernel(path, user)
 
     return
 
 
 def push_eda_kernel(path, user):
-    metadata = {"id": user + "/jane-street-eda",
-                "title": "Jane Street - EDA",
+    metadata = {"id": user + "/js-eda",
+                "title": "JS - EDA",
                 "code_file": "eda.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "true",
+                "competition_sources": ["jane-street-market-prediction"]}
+
+    push_kernel(path, metadata)
+    return
+
+
+def push_mi_kernel(path, user):
+    metadata = {"id": user + "/js-mutual-info",
+                "title": "JS - Mutual Info",
+                "code_file": "mutualinfo.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "true",

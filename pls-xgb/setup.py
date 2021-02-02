@@ -12,20 +12,18 @@ def main():
     path = os.curdir
 
     # choose an operation
-    push_gpu_kernel(path, user)
-    wait_for_kernel(user, "jane-street-gpu")
-    push_gpuutility_kernel(path, user)
-    wait_for_kernel(user, "jane-street-gpu-utility")
-    push_gpusubmission_kernel(path, user)
-    wait_for_kernel(user, "jane-street-gpu-submission")
-
+    # push_xgb(path, user)
+    # wait_for_kernel(user, "js-pls-xgb-training")
+    # push_xgb_utility(path, user)
+    # wait_for_kernel(user, "js-pls-xgb-utility")
+    # push_xgb_submissionl(path, user)
     return
 
 
-def push_gpu_kernel(path, user):
-    metadata = {"id": user + "/jane-street-gpu",
-                "title": "Jane Street - GPU",
-                "code_file": "gpu.ipynb",
+def push_xgb(path, user):
+    metadata = {"id": user + "/js-pls-xgb-training",
+                "title": "JS - PLS XGB - Training",
+                "code_file": "xgb.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_gpu": "true",
@@ -35,30 +33,27 @@ def push_gpu_kernel(path, user):
     return
 
 
-def push_gpuutility_kernel(path, user):
-    metadata = {"id": user + "/jane-street-gpu-utility",
-                "title": "Jane Street - GPU Utility",
-                "code_file": "gpuutility.ipynb",
+def push_xgb_utility(path, user):
+    metadata = {"id": user + "/js-pls-xgb-utility",
+                "title": "JS - PLS XGB - Utility",
+                "code_file": "xgbutility.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
-                "enable_internet": "false",
-                "kernel_sources": [user + "/jane-street-gpu"],
+                "kernel_sources": [user + "/js-pls-xgb-training"],
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
     return
 
 
-def push_gpusubmission_kernel(path, user):
-    metadata = {"id": user + "/jane-street-gpu-submission",
-                "title": "Jane Street - GPU Submission",
-                "code_file": "gpusubmission.ipynb",
+def push_xgb_submissionl(path, user):
+    metadata = {"id": user + "/js-pls-xgb-submission",
+                "title": "JS - PLS XGB - Submission",
+                "code_file": "xgbsubmission.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
-                "enable_internet": "false",
-                "enable_gpu": "true",
-                "kernel_sources": [user + "/jane-street-gpu",
-                                   user + "/jane-street-gpu-utility"],
+                "kernel_sources": [user + "/js-pls-xgb-training",
+                                   user + "/js-pls-xgb-utility"],
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
