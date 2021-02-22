@@ -12,24 +12,25 @@ def main():
     path = os.curdir
 
     # EDA
-    push_eda(path, user)
+    # push_eda(path, user)
 
     # models
-    push_nn(path, user)
-    wait_for_kernel(user, "jane-street-nn")
+    # push_nn(path, user)
+    # wait_for_kernel(user, "jane-street-nn")
 
-    push_edaxgb(path, user)
-    wait_for_kernel(user, "jane-street-eda-xgb")
+    # push_edaxgb(path, user)
+    # wait_for_kernel(user, "jane-street-eda-xgb")
 
-    push_plsxgb(path, user)
-    wait_for_kernel(user, "jane-street-pls-xgb")
+    # push_plsxgb(path, user)
+    # wait_for_kernel(user, "jane-street-pls-xgb", interval=1800)
 
-    # tuner
+    # # untuned submission
+    push_untuned(path, user)
+
+    # # tuned submission
     push_tuner(path, user)
-    wait_for_kernel(user, "jane-street-tuner")
-
-    # submission
-    push_submission(path, user)
+    # wait_for_kernel(user, "jane-street-tuner", interval=600)
+    # push_tuned(path, user)
 
     return
 
@@ -62,7 +63,7 @@ def push_nn(path, user):
 def push_edaxgb(path, user):
     metadata = {"id": user + "/jane-street-eda-xgb",
                 "title": "Jane Street - EDA XGB",
-                "code_file": "eda-xgb.ipynb",
+                "code_file": "edaxgb.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_gpu": "true",
@@ -76,11 +77,28 @@ def push_edaxgb(path, user):
 def push_plsxgb(path, user):
     metadata = {"id": user + "/jane-street-pls-xgb",
                 "title": "Jane Street - PLS XGB",
-                "code_file": "pls-xgb.ipynb",
+                "code_file": "plsxgb.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_gpu": "true",
                 "enable_internet": "true",
+                "competition_sources": ["jane-street-market-prediction"]}
+
+    push_kernel(path, metadata)
+    return
+
+
+def push_untuned(path, user):
+    metadata = {"id": user + "/jane-street-untuned-submission",
+                "title": "Jane Street - Untuned Submission",
+                "code_file": "untuned.ipynb",
+                "language": "python",
+                "kernel_type": "notebook",
+                "enable_internet": "false",
+                "enable_gpu": "true",
+                "kernel_sources": [user + "/jane-street-nn",
+                                   user + "/jane-street-eda-xgb",
+                                   user + "/jane-street-pls-xgb"],
                 "competition_sources": ["jane-street-market-prediction"]}
 
     push_kernel(path, metadata)
@@ -103,10 +121,10 @@ def push_tuner(path, user):
     return
 
 
-def push_submission(path, user):
-    metadata = {"id": user + "/jane-street-submission",
-                "title": "Jane Street - Submission",
-                "code_file": "submission.ipynb",
+def push_tuned(path, user):
+    metadata = {"id": user + "/jane-street-tuned-submission",
+                "title": "Jane Street - Tuned Submission",
+                "code_file": "tuned.ipynb",
                 "language": "python",
                 "kernel_type": "notebook",
                 "enable_internet": "false",
@@ -144,7 +162,7 @@ def wait_for_kernel(user, slug, interval=300):
     # while the status of the kernel is not complete,
     # wait and then check the status of the kernel
     while "complete" not in output:
-        print(f"Waiting for {interval} seconds...")
+        print(f"Waiting for {interval // 60} minutes...")
         time.sleep(interval)
         output = subprocess.check_output(cmd.split()).decode()
         print(output, end="")
