@@ -12,25 +12,23 @@ def main():
     path = os.curdir
 
     # EDA
-    # push_eda(path, user)
+    push_eda(path, user)
 
     # models
-    # push_nn(path, user)
-    # wait_for_kernel(user, "jane-street-nn")
+    push_nn(path, user)
+    wait_for_kernel(user, "jane-street-nn")
+    push_edaxgb(path, user)
+    wait_for_kernel(user, "jane-street-eda-xgb")
+    push_plsxgb(path, user)
+    wait_for_kernel(user, "jane-street-pls-xgb", interval=3600)
 
-    # push_edaxgb(path, user)
-    # wait_for_kernel(user, "jane-street-eda-xgb")
-
-    # push_plsxgb(path, user)
-    # wait_for_kernel(user, "jane-street-pls-xgb", interval=1800)
-
-    # # untuned submission
+    # untuned submission
     push_untuned(path, user)
 
-    # # tuned submission
+    # tuned submission
     push_tuner(path, user)
-    # wait_for_kernel(user, "jane-street-tuner", interval=600)
-    # push_tuned(path, user)
+    wait_for_kernel(user, "jane-street-tuner", interval=600)
+    push_tuned(path, user)
 
     return
 
