@@ -6,7 +6,7 @@ import time
 
 def main():
     # kaggle username
-    user = "soosten"
+    user = "enter your username here"
 
     # path to the repository from working directory
     path = os.curdir
@@ -20,7 +20,7 @@ def main():
     push_edaxgb(path, user)
     wait_for_kernel(user, "jane-street-eda-xgb")
     push_plsxgb(path, user)
-    wait_for_kernel(user, "jane-street-pls-xgb", interval=3600)
+    wait_for_kernel(user, "jane-street-pls-xgb")
 
     # untuned submission
     push_untuned(path, user)
